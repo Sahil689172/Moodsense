@@ -44,3 +44,6 @@
 cors:
   origins:
     - "http://localhost:3000"
+    - "https://685ef524ad3d18d8d6fa1100--moodsense.netlify.app"
+    - "https://moodsense.netlify.app"
+    - "https://moodsense-backend.onrender.com"

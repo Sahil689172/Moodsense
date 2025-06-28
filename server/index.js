@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 const WIT_TOKEN = 'RMCF65UM5QJHRVTPW22SH2C4NSQ6CQZS'; // Paste your token here
-const RASA_URL = process.env.RASA_URL || 'http://127.0.0.1:5005/webhooks/rest/webhook';
+const RASA_URL = process.env.RASA_URL || 'https://web-production-f647.up.railway.app/webhooks/rest/webhook';
 
 app.get('/', (req, res) => {
   res.send('Firebase backend is running!');
@@ -51,6 +51,7 @@ app.get('/api/moods', authenticate, async (req, res) => {
 app.post('/chat', async (req, res) => {
   const { message } = req.body;
   console.log('Received message from UI:', message);
+  console.log('Sending to Rasa URL:', RASA_URL);
   try {
     const rasaRes = await axios.post(RASA_URL, {
       sender: "user",
@@ -61,7 +62,9 @@ app.post('/chat', async (req, res) => {
     res.json({ reply });
   } catch (err) {
     console.error('Error from Rasa:', err);
-    res.json({ reply: "Sorry, I didn't understand that." });
+    console.error('Rasa error details:', err.response?.data || err.message);
+    console.error('Rasa error status:', err.response?.status);
+    res.json({ reply: "Sorry, I'm having trouble connecting to my brain right now. Please try again later." });
   }
 });
 
